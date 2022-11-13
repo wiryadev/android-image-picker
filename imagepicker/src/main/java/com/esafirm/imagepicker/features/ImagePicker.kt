@@ -1,6 +1,7 @@
 package com.esafirm.imagepicker.features
 
 import android.content.Intent
+import android.os.Build
 import com.esafirm.imagepicker.features.cameraonly.ImagePickerCameraOnly
 import com.esafirm.imagepicker.model.Image
 
@@ -15,6 +16,10 @@ object ImagePicker {
 
     @Deprecated("This method will marked internal soon. Please use the new API")
     fun getImages(intent: Intent?): List<Image>? {
-        return intent?.getParcelableArrayListExtra(IpCons.EXTRA_SELECTED_IMAGES)
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent?.getParcelableArrayListExtra(IpCons.EXTRA_SELECTED_IMAGES, Image::class.java)
+        } else {
+            intent?.getParcelableArrayListExtra(IpCons.EXTRA_SELECTED_IMAGES)
+        }
     }
 }
